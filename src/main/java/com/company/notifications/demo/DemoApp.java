@@ -12,12 +12,25 @@ public class DemoApp {
 
         var notification = new Notification(
                 "jorge@test.com",
-                "Hola",
-                "Mensaje Jorge Andres Vera Forero"
+                "Hello",
+                "Message Jorge Andres Vera Forero"
         );
 
-        var result = client.send(ChannelType.EMAIL, notification);
+        var resultMail = client.send(ChannelType.EMAIL, notification);
 
-        System.out.println(result);
+        var resultSms = client.send(
+                ChannelType.SMS,
+                new Notification("3187949964", "SMS", "Hello Test SMS")
+        );
+
+        var resultPush = client.send(
+                ChannelType.PUSH,
+                new Notification("device-id-123", "Push", "Hello Test Push")
+        );
+
+
+        System.out.println(resultMail);
+        System.out.println(resultSms);
+        System.out.println(resultPush);
     }
 }
