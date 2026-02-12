@@ -16,6 +16,7 @@ public class DemoApp {
                 "Message Jorge Andres Vera Forero"
         );
 
+        // Envío síncrono
         var resultMail = client.send(ChannelType.EMAIL, notification);
 
         var resultSms = client.send(
@@ -28,6 +29,11 @@ public class DemoApp {
                 new Notification("device-id-123", "Push", "Hello Test Push")
         );
 
+        // Envío asíncrono (ejemplo)
+        client.sendAsync(
+                ChannelType.SMS,
+                new Notification("3187949964", "SMS", "Hello async SMS")
+        ).thenAccept(result -> System.out.println("Async result: " + result));
 
         System.out.println(resultMail);
         System.out.println(resultSms);

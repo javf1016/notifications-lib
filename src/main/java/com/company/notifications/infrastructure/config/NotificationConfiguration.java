@@ -44,7 +44,7 @@ public class NotificationConfiguration {
                 ChannelType.EMAIL,
                 new EmailChannel(List.of(
                         new FailingEmailProvider(),
-                        new SendGridProvider()
+                        emailProvider
                 ))
         );
 
