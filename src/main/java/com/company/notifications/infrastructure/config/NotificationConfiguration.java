@@ -48,6 +48,13 @@ public class NotificationConfiguration {
                 ))
         );
 
+// Activar el retry
+//        registry.register(
+//                ChannelType.EMAIL,
+//                new EmailChannel(List.of(new FailingEmailProvider()))
+//        );
+
+
 
 
         eventBus.register(logger::handle);

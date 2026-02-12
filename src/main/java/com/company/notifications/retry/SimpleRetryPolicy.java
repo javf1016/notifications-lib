@@ -18,10 +18,22 @@ public class SimpleRetryPolicy implements RetryPolicy {
         int count = 0;
 
         do {
-            result = action.get();
             count++;
-        } while (!result.isSuccess() && count < attempts);
 
+            System.out.println("Retry attempt " + count);
+
+            result = action.get();
+
+            if (result.isSuccess()) {
+                System.out.println("Retry success on attempt " + count);
+                return result;
+            } else {
+                System.out.println("Retry failed on attempt " + count);
+            }
+
+        } while (count < attempts);
+
+        System.out.println("All retry attempts failed");
         return result;
     }
 }
