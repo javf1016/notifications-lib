@@ -1,0 +1,8 @@
+package com.company.notifications.ports.out;
+
+import com.company.notifications.domain.model.Notification;
+import com.company.notifications.domain.model.NotificationResult;
+
+public interface Channel {
+    NotificationResult send(Notification notification);
+}
