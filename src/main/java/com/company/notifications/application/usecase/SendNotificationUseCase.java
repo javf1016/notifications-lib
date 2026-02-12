@@ -1,23 +1,30 @@
 package com.company.notifications.application.usecase;
 
+import com.company.notifications.application.pipeline.*;
 import com.company.notifications.domain.model.ChannelType;
 import com.company.notifications.domain.model.Notification;
 import com.company.notifications.domain.model.NotificationResult;
 import com.company.notifications.resolver.ChannelRegistry;
 import com.company.notifications.retry.RetryPolicy;
 
+import java.util.List;
+
 public class SendNotificationUseCase {
 
-    private final ChannelRegistry registry;
-    private final RetryPolicy retryPolicy;
+    private final NotificationPipeline pipeline;
 
     public SendNotificationUseCase(ChannelRegistry registry, RetryPolicy retryPolicy) {
-        this.registry = registry;
-        this.retryPolicy = retryPolicy;
+        this.pipeline = new NotificationPipeline(List.of(
+                new ValidateNotificationStep(),
+                new ResolveChannelStep(registry),
+                new ExecuteChannelStep(),
+                new RetryStep(retryPolicy)
+        ));
     }
 
     public NotificationResult execute(ChannelType type, Notification notification) {
-        var channel = registry.resolve(type);
-        return retryPolicy.execute(() -> channel.send(notification));
+        var context = new NotificationContext(type, notification);
+        pipeline.execute(context);
+        return context.getResult();
     }
 }
