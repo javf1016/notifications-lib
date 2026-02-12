@@ -4,17 +4,25 @@ import com.company.notifications.domain.model.Notification;
 import com.company.notifications.domain.model.NotificationResult;
 import com.company.notifications.ports.out.Channel;
 import com.company.notifications.ports.out.Provider;
+import java.util.List;
 
 public class EmailChannel implements Channel {
 
-    private final Provider provider;
+    private final List<Provider> providers;
 
-    public EmailChannel(Provider provider) {
-        this.provider = provider;
+    public EmailChannel(List<Provider> providers) {
+        this.providers = providers;
     }
+
 
     @Override
     public NotificationResult send(Notification notification) {
-        return provider.send(notification);
+        for (Provider provider : providers) {
+            var result = provider.send(notification);
+            if (result.isSuccess()) {
+                return result;
+            }
+        }
+        return NotificationResult.failure("All email providers failed");
     }
 }

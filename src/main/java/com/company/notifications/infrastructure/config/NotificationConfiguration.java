@@ -11,6 +11,8 @@ import com.company.notifications.infrastructure.provider.push.FirebaseProvider;
 import com.company.notifications.infrastructure.provider.sms.TwilioProvider;
 import com.company.notifications.resolver.ChannelRegistry;
 import com.company.notifications.retry.SimpleRetryPolicy;
+import java.util.List;
+import com.company.notifications.infrastructure.provider.email.FailingEmailProvider;
 
 public class NotificationConfiguration {
 
@@ -20,17 +22,21 @@ public class NotificationConfiguration {
 
         registry.register(
                 ChannelType.EMAIL,
-                new EmailChannel(new SendGridProvider())
+                new EmailChannel(List.of(
+                        new FailingEmailProvider(),
+                        new SendGridProvider()
+                ))
         );
+
 
         registry.register(
                 ChannelType.SMS,
-                new SmsChannel(new TwilioProvider())
+                new SmsChannel(List.of(new TwilioProvider()))
         );
 
         registry.register(
                 ChannelType.PUSH,
-                new PushChannel(new FirebaseProvider())
+                new PushChannel(List.of(new FirebaseProvider()))
         );
 
         var retryPolicy = new SimpleRetryPolicy(3);
