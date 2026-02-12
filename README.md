@@ -270,7 +270,6 @@ assertTrue(result.isSuccess());
 
 ## 🔮 Roadmap y mejoras futuras
 
-* Configuración externa (YAML / properties).
 * Event Bus distribuido (Kafka / RabbitMQ).
 * Observabilidad (Prometheus, OpenTelemetry).
 * Estrategias avanzadas de retry.
